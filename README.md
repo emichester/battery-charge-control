@@ -53,3 +53,6 @@ SHOW_MESSAGE_TIME = 20.0
 ## Notifications
 
 ![imagen](https://user-images.githubusercontent.com/55881458/114627070-f0077900-9cb4-11eb-8491-b19dbebc766e.png)
+
+![imagen](https://user-images.githubusercontent.com/55881458/114628776-b4ba7980-9cb7-11eb-9306-6d110346956b.png)
+

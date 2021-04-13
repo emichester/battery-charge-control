@@ -29,3 +29,7 @@ and then just double click on the new app with the battery icon.
 ## Appearance
 
 ![imagen](https://user-images.githubusercontent.com/55881458/114626672-550e9f00-9cb4-11eb-9a3e-9846c1177c32.png)
+
+## Notifications
+
+![imagen](https://user-images.githubusercontent.com/55881458/114627070-f0077900-9cb4-11eb-8491-b19dbebc766e.png)

@@ -7,6 +7,7 @@ See:
 You can modify the parameters ( recommended_values		#		test_values ):
 	TIME_TO_WAIT = 		5000		# 2000 ## in milliseconds 
 	LOWER_THRESHOLD = 	40			# 100
+	UPPER_THRESHOLD = 	80
 	SHOW_MESSAGE_TIME = 20.0		# 5.0
 
 Requirements:

@@ -3,6 +3,15 @@ This is a simple alert system made in Python that monitors the charge of the PC.
 
 **Note: this aplication is suposed to work in Ubuntu (Linux in general) and was tested in Ubuntu 18.04 LTS**
 
+## Requirements
+
+```bash
+$ apt-get install -y python3-tk
+$ apt-get install -y python3-pip
+$ pip3 install psutil
+$ pip3 install threading
+```
+
 ## Basic usage
 
 Go to desktop and create a file with _.desktop_ extension, name it as you want e.g. _"battery.desktop"_ With bash simply:
@@ -25,6 +34,17 @@ Type=Application
 ```
 
 and then just double click on the new app with the battery icon.
+
+## Play with the values you think are the best (default values are 40% ↔️ 80%)
+
+You can modify the parameters ( recommended_values		#		test_values ):
+
+```python
+TIME_TO_WAIT = 5000 # in milliseconds 
+LOWER_THRESHOLD = 40
+UPPER_THRESHOLD = 80
+SHOW_MESSAGE_TIME = 20.0
+```
 
 ## Appearance
 

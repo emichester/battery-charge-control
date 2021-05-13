@@ -93,6 +93,8 @@ def th_send_message(quit, quit_sem, event, server_address):
 		quit_sem.acquire(blocking=True, timeout=None)
 		quit_l = quit[0]
 		quit_sem.release()
+	
+	server('off',server_address)
 
 
 

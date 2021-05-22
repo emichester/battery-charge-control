@@ -1,0 +1,6 @@
+## main
+# environment variables
+environ.py
+
+# cache
+__pycache__/

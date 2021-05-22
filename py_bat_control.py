@@ -26,6 +26,8 @@ from time import time, sleep
 import psutil
 from tkinter import Tk, messagebox
 import socket
+## environment variables
+from environ import server_address
 
 def client(client_address=('localhost',8001)):
     """
@@ -99,8 +101,6 @@ def th_send_message(quit, quit_sem, event, server_address):
 
 
 if __name__ == "__main__":
-
-	server_address = ('192.168.1.142',12345)
 
 	event = Event()
 

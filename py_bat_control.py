@@ -20,12 +20,13 @@ TIME_TO_WAIT = 5000 # in milliseconds
 LOWER_THRESHOLD = 45
 UPPER_THRESHOLD = 75
 SEND_MESSAGE_TIME = 20.0
+SHUTDOWN_TIME = 300
 
 from threading import Timer, Thread, Semaphore, Event
 from time import time, sleep
 import psutil
 from tkinter import Tk, messagebox
-import socket
+import os, socket
 ## environment variables
 from environ import server_address
 
@@ -66,6 +67,21 @@ def send_message(state,server_address):
 	else:
 		server('off',server_address)
 
+def ask_for_answer():
+	window = Tk()
+	try:
+		window.wm_withdraw()
+		window.after(TIME_TO_WAIT, window.destroy)
+		answer = messagebox.askyesno(title="¡¡¡ALERTA!!!", message="¡Algo va mal! ¿Quiere evitar que se apague el ordenador? [No]")
+		return answer
+	except:
+		pass
+	finally:
+		try:
+			window.destroy()
+		except:
+			pass
+
 def th_send_message(quit, quit_sem, event, server_address):
 
 	quit_sem.acquire(blocking=True, timeout=None)
@@ -74,29 +90,41 @@ def th_send_message(quit, quit_sem, event, server_address):
 	low_trigger = False
 	high_trigger = False
 
-	while not quit_l:
-		percent = check_battery()
-		print("\n%i"%percent) # borrar
+	try:
+		while not quit_l:
+			percent = check_battery()
+			print("\n%i"%percent) # borrar
 
-		if percent <= LOWER_THRESHOLD:
-			if not low_trigger:
-				send_message(0,server_address)
-			low_trigger = True
-			high_trigger = False
-		elif percent >= UPPER_THRESHOLD:
-			if not high_trigger:
-				send_message(1,server_address)
-			low_trigger = False
-			high_trigger = True
-		
-		
-		event.wait(SEND_MESSAGE_TIME)
+			if percent <= LOWER_THRESHOLD:
+				if not low_trigger:
+					send_message(0,server_address)
+				low_trigger = True
+				high_trigger = False
+			elif percent >= UPPER_THRESHOLD:
+				if not high_trigger:
+					send_message(1,server_address)
+				low_trigger = False
+				high_trigger = True
+			
+			
+			event.wait(SEND_MESSAGE_TIME)
 
-		quit_sem.acquire(blocking=True, timeout=None)
-		quit_l = quit[0]
-		quit_sem.release()
-	
-	server('off',server_address)
+			quit_sem.acquire(blocking=True, timeout=None)
+			quit_l = quit[0]
+			quit_sem.release()
+		
+		server('off',server_address)
+	except:
+		server('off',server_address)
+		answer=False
+		t_ini = time()
+		while t < SHUTDOWN_TIME and not answer:
+			t = time()-t_ini
+			answer = ask_for_answer()
+			if t > SHUTDOWN_TIME and not answer:
+				os.system('shutdown /s')
+			elif answer:
+				break
 
 
 

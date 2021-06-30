@@ -17,8 +17,11 @@ Requirements:
 """
 
 TIME_TO_WAIT = 5000 # in milliseconds 
-LOWER_THRESHOLD = 45
-UPPER_THRESHOLD = 75
+LOWER_THRESHOLD = 30
+UPPER_THRESHOLD = 80
+LOW_BATTERY = 20
+FULL_BATTERY = 100
+MAX_COUNTER = 8
 SEND_MESSAGE_TIME = 20.0
 SHUTDOWN_TIME = 300
 
@@ -91,20 +94,35 @@ def th_send_message(quit, quit_sem, event, server_address):
 	high_trigger = False
 
 	try:
+		counter = 0
 		while not quit_l:
 			percent = check_battery()
 			print("\n%i"%percent) # borrar
 
-			if percent <= LOWER_THRESHOLD:
-				if not low_trigger:
-					send_message(0,server_address)
-				low_trigger = True
-				high_trigger = False
-			elif percent >= UPPER_THRESHOLD:
-				if not high_trigger:
-					send_message(1,server_address)
-				low_trigger = False
-				high_trigger = True
+			if counter < MAX_COUNTER:
+				if percent <= LOWER_THRESHOLD:
+					if not low_trigger:
+						send_message(0,server_address)
+					low_trigger = True
+					high_trigger = False
+				elif percent >= UPPER_THRESHOLD:
+					if not high_trigger:
+						send_message(1,server_address)
+					low_trigger = False
+					high_trigger = True
+					counter += 1
+			else:
+				if percent <= LOW_BATTERY:
+					if not low_trigger:
+						send_message(0,server_address)
+					low_trigger = True
+					high_trigger = False
+				elif percent >= FULL_BATTERY:
+					if not high_trigger:
+						send_message(1,server_address)
+					low_trigger = False
+					high_trigger = True
+					counter = 0
 			
 			
 			event.wait(SEND_MESSAGE_TIME)
